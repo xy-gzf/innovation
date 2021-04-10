@@ -1,0 +1,10 @@
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:52.991	[34minfo[0m	D:/java/Go/GoProject/innovation/initialize/gorm.go:63	register table success
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:53.052	[34minfo[0m	D:/java/Go/GoProject/innovation/initialize/router.go:21	use middleware logger
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:53.052	[34minfo[0m	D:/java/Go/GoProject/innovation/initialize/router.go:24	use middleware cors
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:53.052	[34minfo[0m	D:/java/Go/GoProject/innovation/initialize/router.go:26	register swagger handler
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:53.424	[34minfo[0m	D:/java/Go/GoProject/innovation/initialize/router.go:54	router register success
+[GIN-VUE-ADMIN]2021/04/08 - 22:11:53.425	[34minfo[0m	D:/java/Go/GoProject/innovation/core/server.go:29	server run success on 	{"address": ":8888"}
+[GIN-VUE-ADMIN]2021/04/08 - 22:14:44.633	[34minfo[0m	D:/java/Go/GoProject/innovation/api/sys_initdb.go:46	数据库无需初始化
+[GIN-VUE-ADMIN]2021/04/08 - 22:14:44.686	[34minfo[0m	D:/java/Go/GoProject/innovation/api/sys_initdb.go:46	数据库无需初始化
+[GIN-VUE-ADMIN]2021/04/08 - 22:20:30.163	[34minfo[0m	D:/java/Go/GoProject/innovation/api/sys_initdb.go:46	数据库无需初始化
+[GIN-VUE-ADMIN]2021/04/08 - 22:20:36.083	[34minfo[0m	D:/java/Go/GoProject/innovation/api/sys_initdb.go:46	数据库无需初始化
