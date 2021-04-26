@@ -50,6 +50,7 @@ func Routers() *gin.Engine {
 		router.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 		router.InitWorkflowProcessRouter(PrivateGroup)       // 工作流相关接口
 		router.InitExcelRouter(PrivateGroup)                 // 表格导入导出
+		router.InitGroupRouter(PrivateGroup)                 // 小组管理
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router
