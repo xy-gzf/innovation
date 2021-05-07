@@ -12,7 +12,7 @@ import (
 //@param: group model.Group
 //@return: err error
 
-func CreateGroup(group model.Group) (err error) {
+func CreateGroup(group model.SysGroup) (err error) {
 	err = global.GVA_DB.Create(&group).Error
 	return err
 }
@@ -23,7 +23,7 @@ func CreateGroup(group model.Group) (err error) {
 //@param: group model.Group
 //@return: err error
 
-func DeleteGroup(group model.Group) (err error) {
+func DeleteGroup(group model.SysGroup) (err error) {
 	err = global.GVA_DB.Delete(&group).Error
 	return err
 }
@@ -35,7 +35,7 @@ func DeleteGroup(group model.Group) (err error) {
 //@return: err error
 
 func DeleteGroupByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.Group{}, "id in ?", ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]model.SysGroup{}, "id in ?", ids.Ids).Error
 	return err
 }
 
@@ -45,7 +45,7 @@ func DeleteGroupByIds(ids request.IdsReq) (err error) {
 //@param: group *model.Group
 //@return: err error
 
-func UpdateGroup(group model.Group) (err error) {
+func UpdateGroup(group model.SysGroup) (err error) {
 	err = global.GVA_DB.Save(&group).Error
 	return err
 }
@@ -56,7 +56,7 @@ func UpdateGroup(group model.Group) (err error) {
 //@param: id uint
 //@return: err error, group model.Group
 
-func GetGroup(id uint) (err error, group model.Group) {
+func GetGroup(id uint) (err error, group model.SysGroup) {
 	err = global.GVA_DB.Where("id = ?", id).First(&group).Error
 	return
 }
@@ -71,17 +71,23 @@ func GetGroupInfoList(info request.GroupSearch) (err error, list interface{}, to
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.Group{})
-	var groups []model.Group
+	db := global.GVA_DB.Model(&model.SysGroup{})
+	var groups []model.SysGroup
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Name != "" {
-		db = db.Where("`name` = ?", info.Name)
+	if info.GroupName != "" {
+		db = db.Where("`group_name` = ?", info.GroupName)
 	}
-	if info.Teacher != "" {
-		db = db.Where("`teacher` = ?", info.Teacher)
+	if info.Mentor != "" {
+		db = db.Where("`mentor` = ?", info.Mentor)
 	}
-	if info.Group_leader != "" {
-		db = db.Where("`group_leader` = ?", info.Group_leader)
+	if info.Master != "" {
+		db = db.Where("`master` = ?", info.Master)
+	}
+	if info.CompetitionItem != 0 {
+		db = db.Where("`competition_item` = ?", info.CompetitionItem)
+	}
+	if info.Period != "" {
+		db = db.Where("`period` = ?", info.Period)
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&groups).Error

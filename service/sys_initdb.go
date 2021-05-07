@@ -132,6 +132,8 @@ func InitDB(conf request.InitDB) error {
 		model.WorkflowEndPoint{},
 		model.WorkflowMove{},
 		model.ExaWfLeave{},
+		model.SysGroup{},
+		model.SysParticipatingMembers{},
 	)
 	if err != nil {
 		return err
