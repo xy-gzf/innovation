@@ -8,6 +8,7 @@ import (
 	"innovation/model/request"
 	"innovation/model/response"
 	"innovation/service"
+	"strconv"
 )
 
 // @Tags Group
@@ -21,7 +22,20 @@ import (
 func CreateGroup(c *gin.Context) {
 	var group model.SysGroup
 	_ = c.ShouldBindJSON(&group)
-	if err := service.CreateGroup(group); err != nil {
+	// 获取用户  并将用户设置为组长
+	userId := c.Request.Header.Get("X-User-Id")
+	userIdNum, _ := strconv.Atoi(userId)
+	_, sysUser := service.FindUserById(userIdNum)
+	group.Master = sysUser.Username
+
+	// 获取要插入小组的id，并将组长插入到参赛表中
+	var lastGroup model.SysGroup
+	newGroupId := service.GetNewGroupId(lastGroup)
+	member := model.SysParticipatingMembers{
+		UserId:  userId,
+		GroupId: newGroupId,
+	}
+	if err := service.CreateGroupTx(group, member); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -117,6 +131,32 @@ func GetGroupList(c *gin.Context) {
 	var pageInfo request.GroupSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := service.GetGroupInfoList(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// @Tags Group
+// @Summary 分页获取Group列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GroupSearch true "分页获取Group列表"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /group/getGroupList [get]
+func GetMyGroups(c *gin.Context) {
+	var pageInfo request.GroupSearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	userId := c.Request.Header.Get("X-User-Id")
+
+	if err, list, total := service.GetMyGroups(userId, pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {

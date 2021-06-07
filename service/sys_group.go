@@ -4,6 +4,7 @@ import (
 	"innovation/global"
 	"innovation/model"
 	"innovation/model/request"
+	"strconv"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -15,6 +16,22 @@ import (
 func CreateGroup(group model.SysGroup) (err error) {
 	err = global.GVA_DB.Create(&group).Error
 	return err
+}
+
+func CreateGroupTx(group model.SysGroup, member model.SysParticipatingMembers) (err error) {
+	tx := global.GVA_DB.Begin()
+	if err = tx.Create(&group).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+
+	if err = tx.Create(&member).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -92,4 +109,21 @@ func GetGroupInfoList(info request.GroupSearch) (err error, list interface{}, to
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&groups).Error
 	return err, groups, total
+}
+
+func GetNewGroupId(group model.SysGroup) string {
+	tx := global.GVA_DB.Last(&group)
+	tx.Commit()
+	idNum := int(group.ID) + 1
+	idStr := strconv.Itoa(idNum)
+	return idStr
+}
+
+func GetMyGroups(userId string, info request.GroupSearch) (err error, list interface{}, total int64) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	tx := global.GVA_DB.Raw("select * from sys_participating_members p,sys_groups g "+
+		"where p.user_id=? and p.group_id = g.id limit ? offset ?;", userId, limit, offset)
+	tx.Commit().Scan(list).Count(&total)
+	return
 }
