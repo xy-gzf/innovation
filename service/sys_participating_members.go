@@ -84,3 +84,8 @@ func GetMemberInfoList(info request.MemberSearch) (err error, list interface{}, 
 	err = db.Limit(limit).Offset(offset).Find(&Members).Error
 	return err, Members, total
 }
+
+//func GetMemberByUserId(userId string) (err error, Member []model.SysParticipatingMembers) {
+//	err = global.GVA_DB.Where("user_id = ?", userId).Error
+//	return
+//}

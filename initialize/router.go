@@ -52,6 +52,7 @@ func Routers() *gin.Engine {
 		router.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		router.InitGroupRouter(PrivateGroup)                 // 小组管理
 		router.InitParticipatingMembersRouter(PrivateGroup)  // 参赛人员管理
+		router.InitDynamicRouter(PrivateGroup)               // 动态管理
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router

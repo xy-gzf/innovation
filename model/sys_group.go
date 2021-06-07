@@ -1,13 +1,11 @@
 package model
 
 import (
-	"github.com/satori/go.uuid"
 	"innovation/global"
 )
 
 type SysGroup struct {
 	global.GVA_MODEL
-	UUID            uuid.UUID       `json:"uuid" gorm:"comment:小组UUID"`
 	GroupName       string          `json:"groupName" gorm:"comment:小组名称"`
 	Master          string          `json:"master"  gorm:"comment:组长"`
 	Mentor          string          `json:"mentor" gorm:"default:无;comment:导师" `
