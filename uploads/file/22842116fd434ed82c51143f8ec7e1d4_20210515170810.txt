@@ -1,0 +1,62 @@
+Idea常用快捷键
+
+字体大小 alt+—   或  ctrl+鼠标滚动
+
+
+1、导入包,自动修正
+	Alt+回车	
+
+2、删除行
+	Ctrl+X  
+
+3、注释（// 或者/*...*/ ）
+	Ctrl+/ 或 Ctrl+Shift+/  
+
+4、向下复制一行
+	Alt+A  
+	
+5、选择单词，在此按下选择更多
+	Ctrl+W  
+	
+6、进入方法（相当于ctrl+左键）
+	Ctrl+B  
+	
+7、查找	
+	Ctrl+N			查找类
+	Ctrl+Shift+N	查找文件
+	
+
+8、方法
+生成代码(如get,set方法,构造函数等)		Alt+Insert 		
+可在方法间快速移动						Alt＋Up  &  Alt＋Down	
+展开及隐藏方法							Ctrl +  &  Ctrl -
+
+
+9、文件快速切换
+	Ctrl＋E		可以显示最近编辑的文件列表
+	Alt+1		快速打开或隐藏工程面板
+	Ctrl+tab	切换工作区显示文件
+
+	
+10、项目运行
+	Ctrl+F10	打开运行项目面板（alt+shift+F10）
+	Shift+F10	快速运行项目（ctrl+shift+F10）
+	Ctrl+F2		关闭项目运行
+	Ctrl+F5		重新运行项目
+	
+	Shift+ESC	隐藏窗口
+	
+
+11、创建文件
+	ALT+F		创建普通文件
+	ALT+P		创建包
+	ALT+C		创建Class文件
+	
+	
+	
+	
+	
+	
+	
+
+ 

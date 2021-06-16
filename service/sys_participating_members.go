@@ -85,7 +85,12 @@ func GetMemberInfoList(info request.MemberSearch) (err error, list interface{}, 
 	return err, Members, total
 }
 
-//func GetMemberByUserId(userId string) (err error, Member []model.SysParticipatingMembers) {
-//	err = global.GVA_DB.Where("user_id = ?", userId).Error
+//func GetMembersByUserId(userId string) (err error, Member []model.SysParticipatingMembers) {
+//	err = global.GVA_DB.Where("user_id = ?", userId).First(&Member).Error
 //	return
 //}
+
+func GetMembersByGroupId(groupId string) (err error, Member []model.SysParticipatingMembers) {
+	err = global.GVA_DB.Where("group_id = ?", groupId).First(&Member).Error
+	return
+}
