@@ -155,8 +155,9 @@ func GetMyGroups(c *gin.Context) {
 	var pageInfo request.GroupSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	userId := c.Request.Header.Get("X-User-Id")
-
-	if err, list, total := service.GetMyGroups(userId, pageInfo); err != nil {
+	id, _ := strconv.Atoi(userId)
+	_, user := service.FindUserById(id)
+	if err, list, total := service.GetMyGroups(*user, pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {

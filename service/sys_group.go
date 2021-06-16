@@ -4,6 +4,7 @@ import (
 	"innovation/global"
 	"innovation/model"
 	"innovation/model/request"
+	"innovation/model/response"
 	"strconv"
 )
 
@@ -119,11 +120,95 @@ func GetNewGroupId(group model.SysGroup) string {
 	return idStr
 }
 
-func GetMyGroups(userId string, info request.GroupSearch) (err error, list interface{}, total int64) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
-	tx := global.GVA_DB.Raw("select * from sys_participating_members p,sys_groups g "+
-		"where p.user_id=? and p.group_id = g.id limit ? offset ?;", userId, limit, offset)
-	tx.Commit().Scan(list).Count(&total)
+func GetMyGroups(user model.SysUser, info request.GroupSearch) (err error, list interface{}, total int64) {
+	if user.AuthorityId == "788" {
+		// 学生
+		var memberInfo request.MemberSearch
+		memberInfo.PageInfo = info.PageInfo
+		memberInfo.UserId = strconv.Itoa(int(user.ID))
+		if err, list, total = GetMemberInfoList(memberInfo); err != nil {
+			return
+		}
+		members := list.([]model.SysParticipatingMembers)
+		listMyGroup := make([]response.MyGroupsResponse, 0)
+		for _, member := range members {
+			// 通过参赛列表获取到组的信息
+			groupId, _ := strconv.Atoi(member.GroupId)
+			_, group := GetGroup(uint(groupId))
+
+			// 查找同组成员信息
+			users, errGetUsers := getUsersFromGroup(member.GroupId)
+			if errGetUsers != nil {
+				err = errGetUsers
+				return
+			}
+
+			var myGroup = &response.MyGroupsResponse{
+				Group: group,
+				Users: users,
+			}
+			listMyGroup = append(listMyGroup, *myGroup)
+		}
+		list = listMyGroup
+		return
+	}
+	if user.AuthorityId == "832" {
+		// 导师
+		info.Mentor = user.NickName
+		if err, list, total = GetGroupInfoList(info); err != nil {
+			return
+		}
+		groups := list.([]model.SysGroup)
+		listMyGroup := make([]response.MyGroupsResponse, 0)
+		for _, group := range groups {
+			users, errGetUsers := getUsersFromGroup(strconv.Itoa(int(group.ID)))
+			if errGetUsers != nil {
+				return
+			}
+			var myGroup = &response.MyGroupsResponse{
+				Group: group,
+				Users: users,
+			}
+			listMyGroup = append(listMyGroup, *myGroup)
+		}
+		list = listMyGroup
+		return
+	}
+
+	// 管理员
+	if err, list, total = GetGroupInfoList(info); err != nil {
+		return
+	}
+	groups := list.([]model.SysGroup)
+	listMyGroup := make([]response.MyGroupsResponse, 0)
+	for _, group := range groups {
+		users, errGetUsers := getUsersFromGroup(strconv.Itoa(int(group.ID)))
+		if errGetUsers != nil {
+			return
+		}
+		var myGroup = &response.MyGroupsResponse{
+			Group: group,
+			Users: users,
+		}
+		listMyGroup = append(listMyGroup, *myGroup)
+	}
+	list = listMyGroup
+	return
+}
+
+func getUsersFromGroup(groupId string) (users []model.SysUser, err error) {
+	err, members := GetMembersByGroupId(groupId)
+	if err != nil {
+		return
+	}
+	for _, member := range members {
+		userId, _ := strconv.Atoi(member.UserId)
+		errUser, user := FindUserById(userId)
+		if errUser != nil {
+			err = errUser
+			return
+		}
+		users = append(users, *user)
+	}
 	return
 }
