@@ -15,5 +15,7 @@ func InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
 		FileUploadAndDownloadGroup.GET("/findFile", api.FindFile)                                  // 查询当前文件成功的切片
 		FileUploadAndDownloadGroup.POST("/breakpointContinueFinish", api.BreakpointContinueFinish) // 查询当前文件成功的切片
 		FileUploadAndDownloadGroup.POST("/removeChunk", api.RemoveChunk)                           // 查询当前文件成功的切片
+		FileUploadAndDownloadGroup.POST("/uploadPdf", api.UploadPdf)                               // 上传Pdf
+		FileUploadAndDownloadGroup.GET("/downloadPdf", api.DownloadPdf)                            // 查看Pdf
 	}
 }

@@ -68,6 +68,12 @@ func UpdateGroup(group model.SysGroup) (err error) {
 	return err
 }
 
+func AddFilePathToGroup(group model.SysGroup) (err error) {
+	tx := global.GVA_DB.Model(&group).Update("file_path", group.FilePath)
+	tx.Commit()
+	return err
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetGroup
 //@description: 根据id获取Group记录
