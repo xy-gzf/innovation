@@ -49,7 +49,7 @@ redis:
   db: 0
   password: ""
 system:
-  addr: 8888
+  addr: 8889
   db-type: mysql
   env: public
   oss-type: local
